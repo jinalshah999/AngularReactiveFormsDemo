@@ -1,0 +1,146 @@
+<div class="container">
+  <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+
+        <h3 style="text-align:center">
+            Sign Up
+        </h3>
+
+
+        <div class="form-group">
+              <!-- Username -->
+              <label for="username">Name: <span class="lblError">*</span></label>
+              <div class="controls">
+                <input type="text" id="username" placeholder="Name" class="form-control" formControlName="user_name">
+                <p class="lblError" *ngIf="signupForm.get('user_name').hasError('required')
+                            && !signupForm.get('user_name').pristine">
+                    Name is Required
+                </p>
+                <p class="lblError"
+                   *ngIf="signupForm.get('user_name').hasError('invalidName')
+                            && !signupForm.get('user_name').pristine">
+                    Name is Invalid
+                </p>
+              </div>
+        </div>
+
+        <div class="form-group">
+          <div class="form-check form-check-inline">
+            <!-- Notification -->
+            <input type="radio" id="emailNotification" class="form-check-input" formControlName="user_notification" value="email">
+            <label class="form-check-label" for="emailNotification">Email</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input type="radio" id="phoneNotification" class="form-check-input" formControlName="user_notification" value="phone">
+            <label class="form-check-label" for="phoneNotification">Phone</label>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="col">
+            <div class="form-group">
+              <!-- E-mail -->
+              <label for="email">E-mail: <span class="lblError">*</span></label>
+              <div class="controls">
+                <input type="text" id="email" placeholder="E-mail" class="form-control" formControlName="user_email">
+                <p class="lblError" *ngIf="signupForm.get('user_email').hasError('required') && !signupForm.get('user_email').pristine">
+                  Please provide your E-mail
+                </p>
+                <p class="lblError" *ngIf="signupForm.get('user_email').hasError('email') && !signupForm.get('user_email').pristine">E-mail is Invalid</p>
+
+                <p class="lblError" style="color:blue" *ngIf="(signupForm.get('user_email').status == 'PENDING' && !signupForm.get('user_email').pristine)">Checking...</p>
+                <p class="lblError" style="color:green" *ngIf="(signupForm.get('user_email').status == 'VALID'  && !signupForm.get('user_email').pristine && (!signupForm.get('user_email').value == '' ))">Email is Available</p>
+                <p class="lblError" style="color:red" *ngIf="signupForm.get('user_email').hasError('duplicateEmail')">Email is already Taken</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col">
+            <div class="form-group">
+              <!-- Mobile -->
+              <label for="phone">Phone <span class="lblError">*</span></label>
+              <div class="controls">
+                <input type="number" id="phone" placeholder="Phone" class="form-control" formControlName="user_phone">
+                <p class="lblError" *ngIf="signupForm.get('user_phone').hasError('required') && !signupForm.get('user_phone').pristine">
+                    Phone is Required
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row" formGroupName="password_group">
+            <div class="col">
+              <div class="form-group">
+                <div class="control-group">
+                  <!-- Password -->
+                  <label for="password">Password: <span class="lblError">*</span></label>
+                  <div class="controls">
+                  <input type="password" id="password" placeholder="Password" class="form-control" formControlName="user_password">
+                  <p class="lblError" *ngIf="signupForm.get('password_group').get('user_password').hasError('required') && !signupForm.get('password_group').get('user_password').pristine">
+                      Password is Required
+                  </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <div class="control-group">
+                <!-- Password (Confirm)-->
+                <label for="password_confirm">Password (Confirm): <span class="lblError">*</span></label>
+                <div class="controls">
+                  <input type="password" id="password_confirm" placeholder="Password (Confirm)" class="form-control" formControlName="user_confirmPassword">
+                  <p class="lblError" *ngIf="signupForm.get('password_group').hasError('passwordMatchError')
+                                          && !signupForm.get('password_group').get('user_confirmPassword').pristine">
+                    Password doesn't Match
+                  </p>
+                </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <div class="form-group" >
+          <div class="form-check form-check-inline">
+            <!-- Gender -->
+            <input type="radio" id="genderMale" class="form-check-input" formControlName="user_gender" value="Male">
+            <label class="form-check-label" for="genderMale">Male</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input type="radio" id="genderFemale" class="form-check-input" formControlName="user_gender" value="Female">
+            <label class="form-check-label" for="genderFeMale">Female</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <!-- Hobbies -->
+          <label for="hobbies">Hobbies</label>
+          <div class="controls">
+            <button id="hobbies" type="button" class="btn btn-secondary" (click)="onAddHobbiesClick()" style="width: 8%"> Add</button>
+            <div formArrayName="user_hobbies" *ngFor="let item of getControls();let i = index">
+              <input type="text" [formControlName]="i" class="form-control">
+              <button type="button" class="btn btn-danger btn-sm pull" (click)="onRemoveHobbiesClick(i)">Remove</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+            <!-- City -->
+            <label for="city">City: <span class="lblError">*</span></label>
+            <div class="controls">
+                <select id="city" formControlName="user_city" class="form-control">
+                    <option value="Ahmedabad">Ahmedabad</option>
+                    <option value="Baroda">Baroda</option>
+                    <option value="Surat">Surat</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+          <button class="btn btn-primary" type="submit" [disabled]="signupForm.invalid" style="width: 15%">
+            Sign Up
+          </button>
+        </div>
+
+  </form>
+</div>
